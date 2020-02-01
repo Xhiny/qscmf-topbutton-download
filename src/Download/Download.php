@@ -7,7 +7,7 @@ use Think\View;
 
 class Download extends ButtonType{
 
-    public function build(array $option){
+    public function build(array &$option){
         $my_attribute['type'] = 'download';
         $my_attribute['title'] = '文件批量导出';
         $my_attribute['data-filename'] = '批量导出文件';//导出压缩包的文件名
@@ -27,11 +27,6 @@ class Download extends ButtonType{
         $view = new View();
         $view->assign('gid', $gid);
         $content = $view->fetch(__DIR__ . '/download.html');
-
-        $button_html = $this->compileButton($option);
-        return <<<HTML
-{$button_html}
-{$content}
-HTML;
+        return $content;
     }
 }
