@@ -21,7 +21,7 @@ class Download extends ButtonType{
         }
 
         $gid = Str::uuid();
-        $gid = str_repeat('-', '', $gid);
+        $gid = str_replace('-', '', $gid);
         $option['attribute']['id'] = 'modal-' . $gid;
 
         $view = new View();
