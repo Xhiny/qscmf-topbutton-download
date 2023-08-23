@@ -57,14 +57,19 @@
             url: this.url,
             data: data,
             success: function (res) {
-                that.pageNum++;
-                if (that.count === 0 && that.pageNum == 1) {
-                    that.noData();
-                    return false;
+                // 如果下载文件返回只有一个的话，直接下载
+                if(res.list.length === 1){
+                    window.location.href = res.list[0].url;
+                }else{
+                    that.pageNum++;
+                    if (that.count === 0 && that.pageNum == 1) {
+                        that.noData();
+                        return false;
+                    }
+                    that.currentPiece++;
+                    that.getFileData(res.list);
+                    that.queueInit();
                 }
-                that.currentPiece++;
-                that.getFileData(res.list);
-                that.queueInit();
             },
             fail: function () {
                 alert('下载失败');
