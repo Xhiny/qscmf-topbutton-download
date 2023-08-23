@@ -67,6 +67,7 @@
                     window.location.href = res.list[0].url;
                     return false;
                 }
+                
                 that.currentPiece++;
                 that.getFileData(res.list);
                 that.queueInit();
