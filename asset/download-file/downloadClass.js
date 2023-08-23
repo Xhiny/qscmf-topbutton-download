@@ -58,7 +58,6 @@
             url: this.url,
             data: data,
             success: function (res) {
-                that.pageNum++;
                 if (that.count === 0 && that.pageNum == 1) {
                     that.noData();
                     return false;
@@ -67,6 +66,8 @@
                     window.location.href = res.list[0].url;
                     return false;
                 }
+
+                that.pageNum++;
                 that.currentPiece++;
                 that.getFileData(res.list);
                 that.queueInit();
@@ -211,19 +212,13 @@
             this.noData();
             return false;
         }
+        // 如果文件列表条数超过一条再弹出下载进度的框
+        if(this.count>1){
+            this.initDownloadBar();
+            $('#comm-file-export-modal'+this.gid).modal('show').data('show', true);
+            this.showCloseBtn();
+        }
         this.export();
-        this.initDownloadBar();
-        $('#comm-file-export-modal'+this.gid).modal('show').data('show', true);
-        this.showCloseBtn();
     }
     window.DownloadFileZip = DownloadFileZip;
 }(JSZip, createjs, window));
-
-
-
-
-
-
-
-
-
