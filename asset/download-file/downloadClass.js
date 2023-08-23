@@ -42,6 +42,7 @@
             url: this.url,
             data: data,
             success: function (res) {
+                // count是总条数 pageSize每页条数
                 that.count = res.count;
                 that.pageSize = res.pageSize;
                 that.totalPiece = Math.ceil(that.count / that.pageSize);
@@ -57,19 +58,18 @@
             url: this.url,
             data: data,
             success: function (res) {
-                // 如果下载文件返回只有一个的话，直接下载
-                if(res.list.length === 1){
-                    window.location.href = res.list[0].url;
-                }else{
-                    that.pageNum++;
-                    if (that.count === 0 && that.pageNum == 1) {
-                        that.noData();
-                        return false;
-                    }
-                    that.currentPiece++;
-                    that.getFileData(res.list);
-                    that.queueInit();
+                that.pageNum++;
+                if (that.count === 0 && that.pageNum == 1) {
+                    that.noData();
+                    return false;
                 }
+                if (that.count === 1 && that.pageNum == 1) {
+                    window.location.href = res.list[0].url;
+                    return false;
+                }
+                that.currentPiece++;
+                that.getFileData(res.list);
+                that.queueInit();
             },
             fail: function () {
                 alert('下载失败');
