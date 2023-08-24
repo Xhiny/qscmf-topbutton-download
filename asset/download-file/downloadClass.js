@@ -97,11 +97,12 @@
     DownloadFileZip.prototype.getFileData = function (res) {
         let that = this;
         this.loadData = [];
+        var timestamp = new Date().getTime();
         res.forEach(function (val) {
             var loadDataItem = {
                 id: val.id,
                 name: val.name,
-                src: val.url,
+                src: val.url+"?t=" + timestamp,
                 suffix: val.suffix,
                 crossOrigin: true,
                 type: createjs.AbstractLoader.SOUND
