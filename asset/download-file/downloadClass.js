@@ -52,7 +52,9 @@
     DownloadFileZip.prototype.getSingleFileBlob = function (Url) {
         return new Promise(resolve => {
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", Url, true);
+            // 需要每次请求都要重新设置，不然缓存会丢失可跨域的请求头
+            var timestamp = new Date().getTime();
+            xhr.open("GET", Url+"?t=" + timestamp, true);
             xhr.responseType = "blob";
             xhr.onload = () => {
               if (xhr.status === 200) {
