@@ -49,6 +49,19 @@
             }
         });
     }
+    DownloadFileZip.prototype.getSingleFileBlob = function (Url) {
+        return new Promise(resolve => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", Url, true);
+            xhr.responseType = "blob";
+            xhr.onload = () => {
+              if (xhr.status === 200) {
+                resolve(xhr.response);
+              }
+            };
+            xhr.send();
+        });    
+    }
     DownloadFileZip.prototype.export = function() {
         var data = this.query + '&page=' + this.pageNum + '&selectIds=' + this.selectIds;
         let that = this;
@@ -63,7 +76,27 @@
                     return false;
                 }
                 if (that.count === 1 && that.pageNum == 1) {
-                    window.location.href = res.list[0].url;
+                    const fileData = res.list[0];
+                    const filename = fileData.fullname || fileData.name;
+                    // 单个文件下载，先获取二进制文件
+                    that.getSingleFileBlob(fileData.url).then(blob => {
+                        // 兼容ie保存二进制文件
+                        if (window.navigator.msSaveOrOpenBlob) {
+                            navigator.msSaveBlob(blob, filename);
+                        } else {
+                            const link = document.createElement("a");
+                            const body = document.querySelector("body");
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = filename;
+                            link.style.display = "none";
+                            body.appendChild(link);
+                            link.click();
+                            body.removeChild(link);
+                            window.URL.revokeObjectURL(link.href);
+                        }
+                    }).catch(error => {
+                        alert('下载失败');
+                    })
                     return false;
                 }
 
@@ -101,6 +134,7 @@
         res.forEach(function (val) {
             var loadDataItem = {
                 id: val.id,
+                fullname: val.fullname,
                 name: val.name,
                 src: val.url+"?t=" + timestamp,
                 suffix: val.suffix,
@@ -155,7 +189,11 @@
         //创建文件夹
         // folder = zip.folder(v.name + '_' + v.name);
         // folder.file(v.create_date + '_' + v.m[0],img, {blob: true});
-        this.zip.file( v.name + '_'+v.id+'_'+this.getPhotoOrder()+'.' + v.suffix.toLowerCase(), img);
+        // 文件夹内文件命名
+        const filename = v.fullname
+        ? v.fullname + '.' + v.suffix.toLowerCase()
+        : v.name + '_' + v.id + '_' + this.getPhotoOrder() + '.' + v.suffix.toLowerCase();
+        this.zip.file(filename, img);
         // });
     }
     DownloadFileZip.prototype.createZip = function () {
