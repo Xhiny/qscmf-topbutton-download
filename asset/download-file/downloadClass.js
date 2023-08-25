@@ -77,17 +77,18 @@
                 }
                 if (that.count === 1 && that.pageNum == 1) {
                     const fileData = res.list[0];
-                    const filename = fileData.fullname || fileData.name;
+                    const normalName =  fileData.name + '_' + fileData.id + '_' + that.getPhotoOrder();
+                    const fileName = fileData.fullname || normalName;
                     // 单个文件下载，先获取二进制文件
                     that.getSingleFileBlob(fileData.url).then(blob => {
                         // 兼容ie保存二进制文件
                         if (window.navigator.msSaveOrOpenBlob) {
-                            navigator.msSaveBlob(blob, filename);
+                            navigator.msSaveBlob(blob, fileName);
                         } else {
                             const link = document.createElement("a");
                             const body = document.querySelector("body");
                             link.href = window.URL.createObjectURL(blob);
-                            link.download = filename;
+                            link.download = fileName;
                             link.style.display = "none";
                             body.appendChild(link);
                             link.click();
