@@ -43,19 +43,21 @@ class PostController extends GyListController{
                     "id": "1",
                     "name": "下载重命名的文件名",
                     "url": "https://media.t4tstudio.com/TJlJL2wlKB4Ezb5_qQrp0okWb2c=/Fv2T8J6s6Pupj6zbs2xvdMf9GKN2",
-                    "suffix": "mp3"
+                    "suffix": "mp3",
+                    "fullname":"文件自定义名字"
                 },
                 ....
             ]
         }
-        返回值注解（下面所有键名必填）：
+        返回值注解（下面带*键名为必填）：
         count   总记录数
         pageSize 单页最大记录数    注意：如果是下载单页的数据，令count<=pageSize即可
         list    下载的数据列表
-            id  数据的id
-            name  重命名的文件名   注意：请遵守操作系统文件命名规范
-            url   下载链接地址
-            suffix 文件后缀名
+            *id  数据的id
+            *name  重命名的文件名   注意：请遵守操作系统文件命名规范（默认命名规则：名字_id_序号.文件后缀名）
+            *url   下载链接地址
+            *suffix 文件后缀名
+            fullname 文件自定义名字  注意：若有fullname则name无效
     */
     public function download(){
         //$page 为页码，若不需要请忽略该值
