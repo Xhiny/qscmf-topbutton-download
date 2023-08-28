@@ -57,7 +57,7 @@ class PostController extends GyListController{
             *name  重命名的文件名   注意：请遵守操作系统文件命名规范（默认命名规则：名字_id_序号.文件后缀名）
             *url   下载链接地址
             *suffix 文件后缀名
-            fullname 文件自定义名字 注意：若有fullname则name无效
+            fullname 文件自定义名字  注意：若有fullname则name无效
     */
     public function download(){
         //$page 为页码，若不需要请忽略该值
