@@ -3,11 +3,12 @@ namespace Qs\TopButton\Download;
 
 use Illuminate\Support\Str;
 use Qscmf\Builder\ButtonType\ButtonType;
+use Qscmf\Builder\ListBuilder;
 use Think\View;
 
 class Download extends ButtonType{
 
-    public function build(array &$option){
+    public function build(array &$option, ?ListBuilder $listBuilder){
         $my_attribute['type'] = 'download';
         $my_attribute['title'] = '文件批量导出';
         $my_attribute['data-filename'] = '批量导出文件';//导出压缩包的文件名
